@@ -3,10 +3,21 @@ import TiltCard from '../components/ui/TiltCard';
 
 function Contact() {
   const [status, setStatus] = useState('idle');
+  const [formData, setFormData] = useState({ name: '', email: '', company: '', message: '' });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newMessage = {
+      id: Date.now(),
+      ...formData,
+      status: 'New',
+      date: new Date().toISOString().split('T')[0]
+    };
+    const saved = localStorage.getItem('solar_data_messages');
+    const messages = saved ? JSON.parse(saved) : [];
+    localStorage.setItem('solar_data_messages', JSON.stringify([newMessage, ...messages]));
     setStatus('success');
+    setFormData({ name: '', email: '', company: '', message: '' });
   };
 
   return (
@@ -20,7 +31,7 @@ function Contact() {
       </div>
 
       {/* Glassmorphic Data Cards */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', padding: '0 5%', marginTop: '-8rem', position: 'relative', zIndex: 10, justifyContent: 'center', marginBottom: '4rem' }}>
+       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', padding: '0 5%', marginTop: '-8rem', position: 'relative', zIndex: 10, justifyContent: 'center', marginBottom: '4rem' }}>
         <TiltCard style={{ flex: '1 1 250px', maxWidth: '350px' }}>
           <div className="feature-card" style={{ backgroundImage: 'linear-gradient(to bottom, rgba(2, 6, 23, 0.2) 0%, rgba(2, 6, 23, 0.8) 100%), url(/images/process_consultation.png)', backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%', textAlign: 'center', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '2.5rem 1.5rem', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderRadius: '20px' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem', position: 'relative', zIndex: 1, textShadow: '0 5px 15px rgba(0,0,0,0.5)' }}>📞</div>
@@ -30,7 +41,7 @@ function Contact() {
         </TiltCard>
         
         <TiltCard style={{ flex: '1 1 250px', maxWidth: '350px' }}>
-          <div className="feature-card" style={{ backgroundImage: 'linear-gradient(to bottom, rgba(2, 6, 23, 0.2) 0%, rgba(2, 6, 23, 0.8) 100%), url(/images/proposal_digital.png)', backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%', textAlign: 'center', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '2.5rem 1.5rem', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderRadius: '20px' }}>
+           <div className="feature-card" style={{ backgroundImage: 'linear-gradient(to bottom, rgba(2, 6, 23, 0.2) 0%, rgba(2, 6, 23, 0.8) 100%), url(/images/proposal_digital.png)', backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%', textAlign: 'center', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '2.5rem 1.5rem', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderRadius: '20px' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem', position: 'relative', zIndex: 1, textShadow: '0 5px 15px rgba(0,0,0,0.5)' }}>✉️</div>
             <h3 style={{ color: 'white', marginBottom: '0.5rem', position: 'relative', zIndex: 1, textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>Email Us</h3>
             <p style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', margin: 0, position: 'relative', zIndex: 1, textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>hello@novasolar.test</p>
@@ -69,6 +80,8 @@ function Contact() {
                   type="text" 
                   placeholder="Full Name" 
                   required 
+                  value={formData.name}
+                  onChange={e => setFormData({...formData, name: e.target.value})}
                   style={{ flex: '1 1 250px', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: 'white', fontSize: '1rem', outline: 'none', transition: 'all 0.3s' }} 
                   onFocus={(e) => {e.target.style.border = '1px solid var(--primary)'; e.target.style.background = 'rgba(255,255,255,0.08)'}}
                   onBlur={(e) => {e.target.style.border = '1px solid rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.03)'}}
@@ -77,6 +90,8 @@ function Contact() {
                   type="email" 
                   placeholder="Email Address" 
                   required 
+                  value={formData.email}
+                  onChange={e => setFormData({...formData, email: e.target.value})}
                   style={{ flex: '1 1 250px', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: 'white', fontSize: '1rem', outline: 'none', transition: 'all 0.3s' }} 
                   onFocus={(e) => {e.target.style.border = '1px solid var(--primary)'; e.target.style.background = 'rgba(255,255,255,0.08)'}}
                   onBlur={(e) => {e.target.style.border = '1px solid rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.03)'}}
@@ -85,6 +100,8 @@ function Contact() {
               <input 
                 type="text" 
                 placeholder="Company or Property Name (Optional)" 
+                value={formData.company}
+                onChange={e => setFormData({...formData, company: e.target.value})}
                 style={{ padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: 'white', fontSize: '1rem', outline: 'none', transition: 'all 0.3s' }} 
                 onFocus={(e) => {e.target.style.border = '1px solid var(--primary)'; e.target.style.background = 'rgba(255,255,255,0.08)'}}
                 onBlur={(e) => {e.target.style.border = '1px solid rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.03)'}}
@@ -93,6 +110,8 @@ function Contact() {
                 placeholder="How can we help you?" 
                 rows="6" 
                 required 
+                value={formData.message}
+                onChange={e => setFormData({...formData, message: e.target.value})}
                 style={{ padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: 'white', fontSize: '1rem', outline: 'none', transition: 'all 0.3s', resize: 'vertical' }}
                 onFocus={(e) => {e.target.style.border = '1px solid var(--primary)'; e.target.style.background = 'rgba(255,255,255,0.08)'}}
                 onBlur={(e) => {e.target.style.border = '1px solid rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.03)'}}

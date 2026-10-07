@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import './GooeyNav.css';
 
 const GooeyNav = ({
@@ -92,7 +93,8 @@ const GooeyNav = ({
     };
     Object.assign(filterRef.current.style, styles);
     Object.assign(textRef.current.style, styles);
-    textRef.current.innerText = element.innerText;
+    const anchor = element.querySelector('a');
+    textRef.current.innerText = anchor ? anchor.innerText : element.innerText;
   };
 
   const handleClick = (e, index, item) => {
@@ -170,10 +172,20 @@ const GooeyNav = ({
       <nav>
         <ul ref={navRef}>
           {items.map((item, index) => (
-            <li key={index} className={activeIndex === index ? 'active' : ''}>
-              <a href={item.href || '#'} onClick={e => handleClick(e, index, item)} onKeyDown={e => handleKeyDown(e, index, item)}>
+            <li key={index} className={`${activeIndex === index ? 'active' : ''} ${item.subItems ? 'has-dropdown' : ''}`}>
+              <a href={item.href || '#'} onClick={e => handleClick(e, index, item)} onKeyDown={e => handleKeyDown(e, index, item)} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 {item.label}
+                {item.subItems && <ChevronDown size={14} style={{ marginTop: '2px' }} />}
               </a>
+              {item.subItems && (
+                <div className="dropdown-menu">
+                   {item.subItems.map((sub, i) => (
+                      <a href={sub.href} key={i} onClick={e => { e.preventDefault(); e.stopPropagation(); navigate(sub.href); }} className="dropdown-item">
+                        {sub.label}
+                      </a>
+                   ))}
+                </div>
+              )}
             </li>
           ))}
         </ul>

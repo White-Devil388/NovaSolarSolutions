@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import FlyingPosters from '../components/ui/FlyingPosters';
+import useLocalStorageData from '../hooks/useLocalStorageData';
+import useInfiniteScroll from '../hooks/useInfiniteScroll';
 
 const items = [
   '/images/residential.png',
@@ -10,28 +12,36 @@ const items = [
   '/images/smart_monitor.png'
 ];
 
-const projects = [
+const INITIAL_PROJECTS = [
   {
     id: 1,
-    name: "Modern Villa Installation",
-    type: "Residential",
-    specs: "10 kW System",
-    desc: "Complete offset of electricity usage for a luxury property. Beautifully integrated flat-roof panels.",
+    title: "Modern Villa Installation",
+    client: "Residential (10 kW System)",
+    description: "Complete offset of electricity usage for a luxury property. Beautifully integrated flat-roof panels.",
     image: "/images/residential.png",
-    icon: "🏡"
+    status: 'Published'
   },
   {
     id: 2,
-    name: "Tech Park Mega-Install",
-    type: "Commercial",
-    specs: "500 kW System",
-    desc: "Significant carbon reduction and massive cost savings for a modern commercial tech warehouse.",
+    title: "Tech Park Mega-Install",
+    client: "Commercial (500 kW System)",
+    description: "Significant carbon reduction and massive cost savings for a modern commercial tech warehouse.",
     image: "/images/commercial.png",
-    icon: "🏢"
+    status: 'Published'
   }
 ];
 
 function Projects() {
+  const fetchedProjects = useLocalStorageData('Projects');
+
+  // Memoize fallback logic to prevent constant recalculations
+  const activeProjects = useMemo(() => {
+    return fetchedProjects.length > 0 ? fetchedProjects : INITIAL_PROJECTS;
+  }, [fetchedProjects]);
+
+  // Hook for infinite scrolling
+  const { displayedData, hasMore, loaderRef } = useInfiniteScroll(activeProjects, 4);
+
   return (
     <>
       <div style={{ background: '#020617', paddingTop: '4rem' }}>
@@ -51,28 +61,36 @@ function Projects() {
       </div>
 
       <div className="features-grid">
-        {projects.map(project => (
+        {displayedData.map(project => (
           <div key={project.id} className="feature-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <div style={{ position: 'relative', height: '240px' }}>
-               <img src={project.image} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+               <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--primary)', color: 'black', padding: '0.2rem 0.8rem', borderRadius: '4px', fontWeight: 'bold' }}>
-                {project.type}
+                {project.client?.split(' ')[0] || "Project"}
               </div>
             </div>
             
             <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ margin: 0 }}>{project.name}</h3>
-                <span style={{ fontSize: '1.5rem' }}>{project.icon}</span>
+                <h3 style={{ margin: 0 }}>{project.title}</h3>
+                <span style={{ fontSize: '1.5rem' }}>{project.icon || "☀️"}</span>
               </div>
-              <p style={{ color: 'var(--primary)', margin: '0.5rem 0', fontWeight: 'bold' }}>{project.specs}</p>
-              <p style={{ color: 'var(--text-muted)' }}>{project.desc}</p>
+              <p style={{ color: 'var(--primary)', margin: '0.5rem 0', fontWeight: 'bold' }}>{project.client}</p>
+              <p style={{ color: 'var(--text-muted)' }}>{project.description}</p>
               
-              <button className="btn btn-outline" style={{ marginTop: '1.5rem', width: '100%', padding: '0.6rem' }}>View Case Study</button>
+              <button className="btn btn-outline" style={{ marginTop: 'auto', width: '100%', padding: '0.6rem' }}>View Case Study</button>
             </div>
           </div>
         ))}
       </div>
+      
+      <div ref={loaderRef} style={{ height: '20px', width: '100%', margin: '1rem 0' }}></div>
+      
+      {hasMore && (
+        <div style={{ textAlign: 'center', color: 'var(--primary)', padding: '1rem' }}>
+          Loading more projects...
+        </div>
+      )}
     </div>
     </>
   );

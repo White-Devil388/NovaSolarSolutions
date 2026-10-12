@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X, ChevronDown } from 'lucide-react';
+import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X, ChevronDown, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GooeyNav from './GooeyNav';
 import BlurText from '../reactbits/BlurText';
@@ -89,10 +89,75 @@ function Layout() {
               flexDirection: 'column',
               alignItems: 'center',
               overflowY: 'auto',
-              padding: '6rem 1.5rem 3rem 1.5rem',
+              padding: '1.2rem 1.5rem 3rem 1.5rem',
               boxSizing: 'border-box'
             }}
           >
+            {/* Top Bar with Back Button & Close */}
+            <div style={{
+              width: '100%',
+              maxWidth: '420px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.8rem',
+              paddingBottom: '0.8rem',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: 'var(--white)',
+                  padding: '0.5rem 0.9rem',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  fontFamily: 'inherit',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <ArrowLeft size={18} />
+                <span>Back</span>
+              </button>
+
+              <Link 
+                to="/" 
+                className="nav-brand" 
+                style={{ textDecoration: 'none', fontSize: '1.25rem' }} 
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Nova<span>Solar</span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Close Navigation Menu"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: 'var(--white)',
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.2rem', width: '100%', maxWidth: '400px' }}>
               {navItems.map((item, index) => {
                 const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
@@ -200,11 +265,35 @@ function Layout() {
               <Link 
                 to="/portal" 
                 className="btn btn-primary" 
-                style={{ marginTop: '1rem', width: '100%', padding: '0.85rem', textAlign: 'center' }} 
+                style={{ marginTop: '0.5rem', width: '100%', padding: '0.85rem', textAlign: 'center' }} 
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Employee Portal
               </Link>
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  background: 'transparent',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: 'var(--sky-200)',
+                  width: '100%',
+                  padding: '0.75rem',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  fontSize: '0.95rem',
+                  fontWeight: '500',
+                  fontFamily: 'inherit',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Page</span>
+              </button>
             </div>
           </motion.div>
         )}

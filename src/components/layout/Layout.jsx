@@ -46,9 +46,11 @@ function Layout() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isHomePage = location.pathname === '/';
+
   return (
     <>
-      <header className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+      <header className={`navbar ${isScrolled || !isHomePage ? 'scrolled' : ''}`}>
         <Link to="/" className="nav-brand" style={{textDecoration: 'none'}}>
           Nova<span>Solar</span>
         </Link>

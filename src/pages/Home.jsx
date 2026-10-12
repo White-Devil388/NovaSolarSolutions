@@ -112,12 +112,16 @@ function Home() {
     <>
       {/* 1. Hero */}
       <section className="hero" style={{ marginTop: '-80px', position: 'relative', overflow: 'hidden' }}>
-        <img 
-          src="/solar_hero.png" 
-          alt="NovaSolar Luxury Architecture" 
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
           className="hero-bg" 
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -2 }}
-        />
+        >
+          <source src="/upscaled-video.mp4" type="video/mp4" />
+        </video>
         <div className="hero-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
         
         <div className="hero-content">

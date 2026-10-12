@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X } from 'lucide-react';
+import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GooeyNav from './GooeyNav';
 import BlurText from '../reactbits/BlurText';
@@ -10,6 +10,7 @@ function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navItems = [
@@ -28,9 +29,10 @@ function Layout() {
     { label: "Contact", href: "/contact" },
   ];
 
-  // Close mobile menu on route change
+  // Close mobile menu and dropdown on route change
   React.useEffect(() => {
     setIsMobileMenuOpen(false);
+    setOpenDropdown(null);
   }, [location.pathname]);
 
   // Handle scroll effect for navbar
@@ -91,53 +93,110 @@ function Layout() {
               boxSizing: 'border-box'
             }}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', width: '100%', maxWidth: '400px' }}>
-              {navItems.map((item, index) => (
-                <div key={index} style={{ width: '100%', textAlign: 'center' }}>
-                  {item.subItems ? (
-                    <div>
-                      <div 
-                        style={{ fontSize: '1.3rem', fontWeight: '600', color: 'var(--white)', letterSpacing: '0.5px', marginBottom: '0.8rem', opacity: 0.9 }}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.2rem', width: '100%', maxWidth: '400px' }}>
+              {navItems.map((item, index) => {
+                const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
+                const isDropdownOpen = openDropdown === item.label;
+
+                return (
+                  <div key={index} style={{ width: '100%', textAlign: 'center' }}>
+                    {hasSubItems ? (
+                      <div style={{ width: '100%' }}>
+                        <button 
+                          type="button"
+                          onClick={() => setOpenDropdown(isDropdownOpen ? null : item.label)}
+                          style={{ 
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            fontSize: '1.25rem', 
+                            fontWeight: '600', 
+                            color: isDropdownOpen ? 'var(--teal-400)' : 'var(--white)', 
+                            background: isDropdownOpen ? 'rgba(255,255,255,0.06)' : 'transparent',
+                            border: '1px solid ' + (isDropdownOpen ? 'rgba(20, 163, 168, 0.3)' : 'transparent'),
+                            borderRadius: '12px',
+                            padding: '0.65rem 1rem',
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            transition: 'all 0.25s ease'
+                          }}
+                        >
+                          <span>{item.label}</span>
+                          <ChevronDown 
+                            size={18} 
+                            style={{ 
+                              transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)', 
+                              transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                              color: isDropdownOpen ? 'var(--teal-400)' : 'var(--sky-200)'
+                            }} 
+                          />
+                        </button>
+
+                        <AnimatePresence>
+                          {isDropdownOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25, ease: 'easeInOut' }}
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <div style={{ 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                gap: '0.4rem', 
+                                padding: '0.75rem 0.5rem', 
+                                marginTop: '0.4rem',
+                                background: 'rgba(255,255,255,0.05)', 
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                borderRadius: '14px' 
+                              }}>
+                                {item.subItems.map((sub, i) => (
+                                  <Link 
+                                    key={i} 
+                                    to={sub.href} 
+                                    style={{
+                                      fontSize: '1rem', 
+                                      fontWeight: '500', 
+                                      color: 'var(--sky-200)', 
+                                      textDecoration: 'none', 
+                                      padding: '0.5rem 1rem',
+                                      borderRadius: '8px',
+                                      transition: 'background 0.2s, color 0.2s'
+                                    }} 
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                  >
+                                    {sub.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link 
+                        to={item.href} 
+                        style={{
+                          fontSize: '1.25rem',
+                          fontWeight: '600',
+                          color: 'var(--white)',
+                          textDecoration: 'none',
+                          display: 'block',
+                          padding: '0.65rem 1rem',
+                          borderRadius: '12px',
+                          transition: 'background 0.2s'
+                        }} 
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.label}
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', padding: '0.5rem 0', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                        {item.subItems.map((sub, i) => (
-                          <Link 
-                            key={i} 
-                            to={sub.href} 
-                            style={{
-                              fontSize: '1.05rem', 
-                              fontWeight: '500', 
-                              color: 'var(--sky-200)', 
-                              textDecoration: 'none', 
-                              padding: '0.4rem 0'
-                            }} 
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <Link 
-                      to={item.href} 
-                      style={{
-                        fontSize: '1.3rem',
-                        fontWeight: '600',
-                        color: 'var(--white)',
-                        textDecoration: 'none',
-                        display: 'block',
-                        padding: '0.5rem 0'
-                      }} 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </div>
-              ))}
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
               <Link 
                 to="/portal" 
                 className="btn btn-primary" 

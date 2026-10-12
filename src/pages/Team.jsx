@@ -56,7 +56,7 @@ export default function Team() {
       
       <div style={{ textAlign: 'center', marginBottom: '5rem', marginTop: '2rem' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 style={{ fontSize: '3.5rem', fontFamily: 'Outfit, sans-serif', marginBottom: '1rem' }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 4.5vw, 3.2rem)', fontFamily: 'Outfit, sans-serif', marginBottom: '1rem' }}>
             Meet The <span style={{ color: 'var(--primary)' }}>Team</span>
           </h1>
           <p style={{ color: 'var(--text-light)', opacity: 0.8, maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem' }}>

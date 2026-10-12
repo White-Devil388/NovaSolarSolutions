@@ -258,6 +258,56 @@ a {
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
+/* Page Banner Component Styles */
+.page-banner {
+  position: relative;
+  min-height: 320px;
+  margin-top: -80px;
+  padding-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+.page-banner-content {
+  padding: 0 2rem;
+  z-index: 2;
+  position: relative;
+  max-width: 850px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.page-banner-breadcrumb {
+  color: var(--sky-200);
+  font-size: 0.85rem;
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+}
+
+.page-banner-title {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 1.15;
+  margin-bottom: 0.85rem;
+  color: white;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.page-banner-subtitle {
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  color: var(--sky-100);
+  margin: 0 auto;
+  max-width: 650px;
+  line-height: 1.5;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
 /* Home Environmental Impact Stats Section */
 .home-stats-section {
   padding: 4rem 5%;
@@ -989,6 +1039,29 @@ footer {
     margin-bottom: 1.5rem; 
     max-width: 100%;
   }
+
+  /* Page Banner Mobile Adjustments */
+  .page-banner {
+    min-height: 240px !important;
+    padding-top: 75px !important;
+  }
+  .page-banner-content {
+    padding: 0 1.2rem !important;
+  }
+  .page-banner-title {
+    font-size: 1.85rem !important;
+    line-height: 1.22 !important;
+    margin-bottom: 0.6rem !important;
+  }
+  .page-banner-subtitle {
+    font-size: 0.92rem !important;
+    line-height: 1.45 !important;
+  }
+  .page-banner-breadcrumb {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+    letter-spacing: 0.8px !important;
+  }
   
   .hero-content {
     display: flex;
@@ -1244,6 +1317,24 @@ footer {
   .hero-title { font-size: 1.75rem !important; }
   .nav-brand { font-size: 1.4rem; }
   .page-padding { padding: 2rem 1rem; }
+  
+  .page-banner {
+    min-height: 210px !important;
+    padding-top: 68px !important;
+  }
+  .page-banner-content {
+    padding: 0 0.9rem !important;
+  }
+  .page-banner-title {
+    font-size: 1.55rem !important;
+    line-height: 1.2 !important;
+  }
+  .page-banner-subtitle {
+    font-size: 0.85rem !important;
+  }
+  .page-banner-breadcrumb {
+    font-size: 0.7rem !important;
+  }
   
   .modal-responsive {
     padding: 1.2rem !important;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X, ChevronDown, ArrowLeft } from 'lucide-react';
+import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GooeyNav from './GooeyNav';
 import BlurText from '../reactbits/BlurText';
@@ -93,7 +93,7 @@ function Layout() {
               boxSizing: 'border-box'
             }}
           >
-            {/* Top Bar with Back Button & Close */}
+            {/* Top Bar with Brand & Close (Cross) */}
             <div style={{
               width: '100%',
               maxWidth: '420px',
@@ -104,33 +104,10 @@ function Layout() {
               paddingBottom: '0.8rem',
               borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <button
-                type="button"
-                onClick={() => setIsMobileMenuOpen(false)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.45rem',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  color: 'var(--white)',
-                  padding: '0.5rem 0.9rem',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  fontSize: '0.95rem',
-                  fontWeight: '600',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <ArrowLeft size={18} />
-                <span>Back</span>
-              </button>
-
               <Link 
                 to="/" 
                 className="nav-brand" 
-                style={{ textDecoration: 'none', fontSize: '1.25rem' }} 
+                style={{ textDecoration: 'none', fontSize: '1.35rem' }} 
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Nova<span>Solar</span>
@@ -147,14 +124,14 @@ function Layout() {
                   background: 'rgba(255, 255, 255, 0.08)',
                   border: '1px solid rgba(255, 255, 255, 0.15)',
                   color: 'var(--white)',
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '10px',
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '12px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
                 }}
               >
-                <X size={20} />
+                <X size={22} />
               </button>
             </div>
 
@@ -270,30 +247,6 @@ function Layout() {
               >
                 Employee Portal
               </Link>
-              <button
-                type="button"
-                onClick={() => setIsMobileMenuOpen(false)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                  background: 'transparent',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  color: 'var(--sky-200)',
-                  width: '100%',
-                  padding: '0.75rem',
-                  borderRadius: '12px',
-                  cursor: 'pointer',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <ArrowLeft size={16} />
-                <span>Back to Page</span>
-              </button>
             </div>
           </motion.div>
         )}

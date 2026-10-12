@@ -154,6 +154,7 @@ const TiltCard = ({
 
   const handlePointerMove = useCallback(
     event => {
+      if (event.pointerType === 'touch') return;
       const shell = shellRef.current;
       if (!shell || !tiltEngine) return;
       const { x, y } = getOffsets(event, shell);
@@ -164,6 +165,7 @@ const TiltCard = ({
 
   const handlePointerEnter = useCallback(
     event => {
+      if (event.pointerType === 'touch') return;
       const shell = shellRef.current;
       if (!shell || !tiltEngine) return;
 

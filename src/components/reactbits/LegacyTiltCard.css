@@ -34,7 +34,7 @@
   perspective: 800px;
   transform: translate3d(0, 0, 0.1px);
   position: relative;
-  touch-action: none;
+  touch-action: pan-y;
   width: 100%;
   height: 100%;
 }
@@ -263,5 +263,15 @@
       0 var(--background-y),
       90% 90%,
       center;
+  }
+}
+
+@media (max-width: 768px) {
+  .pc-card-wrapper,
+  .pc-card-shell,
+  .pc-card,
+  .pc-inside,
+  .pc-content-wrapper {
+    touch-action: pan-y !important;
   }
 }

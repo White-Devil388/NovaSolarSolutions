@@ -74,6 +74,7 @@ export default function Team() {
               background: linear-gradient(to bottom, var(--teal-500), transparent);
             }
             .team-card {
+              touch-action: pan-y;
               background: rgba(255, 255, 255, 0.95);
               backdrop-filter: blur(10px);
               border: 1px solid rgba(18, 48, 107, 0.1);

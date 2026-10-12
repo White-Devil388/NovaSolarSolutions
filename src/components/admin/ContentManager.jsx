@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import usePagination from '../../hooks/usePagination';
 
-const CATEGORIES = ['Projects', 'Products', 'FAQ', 'Testimonials', 'Blogs', 'Messages', 'Company Settings'];
+const CATEGORIES = ['Projects', 'Products', 'FAQ', 'Testimonials', 'Blogs', 'Messages', 'Stats', 'Process', 'Partners', 'Company Settings'];
 
 const DEFAULT_COMPANY_SETTINGS = {
   aboutUs: 'Nova Solar Solutions is dedicated to bringing sustainable, high-efficiency solar energy to homes and businesses globally.',
@@ -43,6 +42,23 @@ const DUMMY_DATA_MAP = {
     { id: 1, title: 'How Many Solar Panels Do You Need?', author: 'Tech Guides • 5 min read', content: 'A comprehensive guide to calculating your home energy requirements and sizing your solar array perfectly.', image: '/images/roof_3d.png', status: 'Published', date: new Date().toISOString().split('T')[0] },
     { id: 2, title: 'Monocrystalline vs Polycrystalline', author: 'Analysis • 4 min read', content: 'Which technology is right for you? We break down the cost, efficiency, and aesthetics of both options.', image: '/images/tech_flow.png', status: 'Published', date: new Date().toISOString().split('T')[0] },
     { id: 3, title: 'New Solar Incentives for 2025', author: 'Industry News • 3 min read', content: 'Discover the latest tax credits and local rebates that can significantly reduce your installation costs.', image: '/images/smart_monitor.png', status: 'Published', date: new Date().toISOString().split('T')[0] }
+  ],
+  Stats: [
+    { id: 1, label: '10M+', description: 'Tons CO2 Reduced', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 2, label: '25K+', description: 'Homes Powered', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 3, label: '150+', description: 'Cities Covered', status: 'Published', date: new Date().toISOString().split('T')[0] }
+  ],
+  Process: [
+    { id: 1, stepNum: '01', title: 'Free Consultation', description: 'We understand your energy requirements, evaluate your roof space, and determine the optimal system sizing.', color: '', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 2, stepNum: '02', title: 'Custom System Design', description: 'We create a precise 3D model of your home for shaded-free panel mapping and optimized generation.', color: 'var(--teal-600)', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 3, stepNum: '03', title: 'Professional Installation', description: 'Swift mounting, wiring, and commissioning by our certified engineering team to ensure safety and efficiency.', color: 'var(--blue-500)', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 4, stepNum: '04', title: 'Start Saving', description: 'Monitor your performance in real-time on our app, enjoy government subsidies, and watch your electricity bills drop.', color: 'var(--blue-500)', status: 'Published', date: new Date().toISOString().split('T')[0] }
+  ],
+  Partners: [
+    { id: 1, name: 'ECO POWER', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 2, name: 'SUNERGY LLC', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 3, name: 'GREEN TECH CORP', status: 'Published', date: new Date().toISOString().split('T')[0] },
+    { id: 4, name: 'NATIONWIDE SOLAR', status: 'Published', date: new Date().toISOString().split('T')[0] }
   ]
 };
 
@@ -198,6 +214,38 @@ export default function ContentManager() {
         </>
       );
     }
+    if (activeCategory === 'Stats') {
+      return (
+        <>
+          <label className="modal-lbl">Stat Label (e.g., 10M+)</label>
+          <input required type="text" className="modal-inp" value={formData.label || ''} onChange={e => setFormData({...formData, label: e.target.value})} />
+          <label className="modal-lbl">Description (e.g., Tons CO2 Reduced)</label>
+          <input required type="text" className="modal-inp" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} />
+        </>
+      );
+    }
+    if (activeCategory === 'Process') {
+      return (
+        <>
+          <label className="modal-lbl">Step Number (e.g., 01)</label>
+          <input required type="text" className="modal-inp" value={formData.stepNum || ''} onChange={e => setFormData({...formData, stepNum: e.target.value})} />
+          <label className="modal-lbl">Title</label>
+          <input required type="text" className="modal-inp" value={formData.title || ''} onChange={e => setFormData({...formData, title: e.target.value})} />
+          <label className="modal-lbl">Description</label>
+          <textarea required rows="4" className="modal-inp" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} />
+          <label className="modal-lbl">Accent Color (optional variable like var(--teal-600))</label>
+          <input type="text" className="modal-inp" value={formData.color || ''} onChange={e => setFormData({...formData, color: e.target.value})} />
+        </>
+      );
+    }
+    if (activeCategory === 'Partners') {
+      return (
+        <>
+          <label className="modal-lbl">Partner / Company Name</label>
+          <input required type="text" className="modal-inp" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} />
+        </>
+      );
+    }
     return null;
   };
 
@@ -209,6 +257,9 @@ export default function ContentManager() {
       case 'Testimonials': return <><th className="th-style">Customer</th><th className="th-style">Review</th><th className="th-style">Status</th></>;
       case 'Blogs': return <><th className="th-style">Blog Details</th><th className="th-style">Author</th><th className="th-style">Status</th></>;
       case 'Messages': return <><th className="th-style">Sender Contact</th><th className="th-style">Message Preview</th><th className="th-style">Status</th></>;
+      case 'Stats': return <><th className="th-style">Label</th><th className="th-style">Description</th><th className="th-style">Status</th></>;
+      case 'Process': return <><th className="th-style">Step</th><th className="th-style">Details</th><th className="th-style">Status</th></>;
+      case 'Partners': return <><th className="th-style">Name</th><th className="th-style">Status</th></>;
       default: return null;
     }
   };
@@ -222,11 +273,7 @@ export default function ContentManager() {
       </td>
     );
 
-    const imageBox = item.image ? (
-      <img src={item.image} alt="Thumb" style={{ minWidth: '40px', width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />
-    ) : (
-      <div style={{ minWidth: '40px', width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>🖼️</div>
-    );
+    const imageBox = null;
 
     switch (activeCategory) {
       case 'Projects': 
@@ -236,12 +283,12 @@ export default function ContentManager() {
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 {imageBox}
                 <div>
-                  <div style={{ fontWeight: 'bold', color: 'white' }}>{item.title}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#94a3b8', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.title}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-body)', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</div>
                 </div>
               </div>
             </td>
-            <td style={{ padding: '1.2rem 1.5rem', color: '#e2e8f0' }}>{item.client}</td>
+            <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>{item.client}</td>
             {statusCell}
           </>
         );
@@ -252,12 +299,12 @@ export default function ContentManager() {
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 {imageBox}
                 <div>
-                  <div style={{ fontWeight: 'bold', color: 'white' }}>{item.name}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#38bdf8' }}>{item.category}</div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.name}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--teal-600)' }}>{item.category}</div>
                 </div>
               </div>
             </td>
-            <td style={{ padding: '1.2rem 1.5rem', color: '#e2e8f0' }}>{item.price}</td>
+            <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>{item.price}</td>
             {statusCell}
           </>
         );
@@ -265,8 +312,8 @@ export default function ContentManager() {
         return (
           <>
             <td style={{ padding: '1.2rem 1.5rem' }}>
-              <div style={{ fontWeight: 'bold', color: 'white', marginBottom: '0.3rem' }}>Q: {item.question}</div>
-              <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>A: {item.answer}</div>
+              <div style={{ fontWeight: 'bold', color: 'var(--navy-900)', marginBottom: '0.3rem' }}>Q: {item.question}</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-body)' }}>A: {item.answer}</div>
             </td>
             {statusCell}
           </>
@@ -278,12 +325,12 @@ export default function ContentManager() {
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 {imageBox}
                 <div>
-                  <div style={{ fontWeight: 'bold', color: 'white' }}>{item.name}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#38bdf8' }}>{item.role}</div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.name}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--teal-600)' }}>{item.role}</div>
                 </div>
               </div>
             </td>
-            <td style={{ padding: '1.2rem 1.5rem', color: '#e2e8f0' }}>
+            <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>
               <div style={{ fontStyle: 'italic', maxWidth: '350px' }}>"{item.review}"</div>
               <div style={{ color: '#f59e0b', fontSize: '0.9rem', marginTop: '0.5rem' }}>{'★'.repeat(item.rating)}{'☆'.repeat(5 - item.rating)}</div>
             </td>
@@ -297,12 +344,12 @@ export default function ContentManager() {
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 {imageBox}
                 <div>
-                  <div style={{ fontWeight: 'bold', color: 'white' }}>{item.title}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#94a3b8', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.content}</div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.title}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-body)', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.content}</div>
                 </div>
               </div>
             </td>
-            <td style={{ padding: '1.2rem 1.5rem', color: '#e2e8f0' }}>{item.author}</td>
+            <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>{item.author}</td>
             {statusCell}
           </>
         );
@@ -310,11 +357,11 @@ export default function ContentManager() {
         return (
           <>
             <td style={{ padding: '1.2rem 1.5rem' }}>
-              <div style={{ fontWeight: 'bold', color: 'white' }}>{item.name}</div>
-              <div style={{ fontSize: '0.85rem', color: '#38bdf8' }}>{item.email}</div>
-              {item.company && <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{item.company}</div>}
+              <div style={{ fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.name}</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--teal-600)' }}>{item.email}</div>
+              {item.company && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{item.company}</div>}
             </td>
-            <td style={{ padding: '1.2rem 1.5rem', color: '#e2e8f0' }}>
+            <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>
               <div style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {item.message}
               </div>
@@ -326,6 +373,32 @@ export default function ContentManager() {
             </td>
           </>
         );
+      case 'Stats':
+        return (
+          <>
+            <td style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.label}</td>
+            <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>{item.description}</td>
+            {statusCell}
+          </>
+        );
+      case 'Process':
+        return (
+          <>
+            <td style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.stepNum}</td>
+            <td style={{ padding: '1.2rem 1.5rem' }}>
+              <div style={{ fontWeight: 'bold', color: 'var(--navy-900)', marginBottom: '0.3rem' }}>{item.title}</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-body)' }}>{item.description}</div>
+            </td>
+            {statusCell}
+          </>
+        );
+      case 'Partners':
+        return (
+          <>
+            <td style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold', color: 'var(--navy-900)' }}>{item.name}</td>
+            {statusCell}
+          </>
+        );
       default: return null;
     }
   };
@@ -333,11 +406,11 @@ export default function ContentManager() {
   React.useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
-      .th-style { padding: 1rem 1.5rem; color: #94a3b8; font-weight: 500; }
-      .modal-lbl { display: block; color: #94a3b8; margin-bottom: 0.5rem; font-size: 0.9rem; margin-top: 1rem; }
+      .th-style { padding: 1rem 1.5rem; color: var(--navy-800); font-weight: 600; }
+      .modal-lbl { display: block; color: var(--navy-800); margin-bottom: 0.5rem; font-size: 0.9rem; margin-top: 1rem; font-weight: 600; }
       .modal-lbl:first-child { margin-top: 0; }
-      .modal-inp { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none; box-sizing: border-box; }
-      .modal-inp:focus { border-color: #38bdf8; }
+      .modal-inp { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--sky-200); background: var(--white); color: var(--navy-900); outline: none; box-sizing: border-box; }
+      .modal-inp:focus { border-color: var(--teal-500); }
     `;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
@@ -346,36 +419,52 @@ export default function ContentManager() {
   const { currentData, currentPage, totalPages, nextPage, prevPage } = usePagination(items, 6); // Display up to 6 rows per page for admin view
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <div >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontFamily: 'Outfit, sans-serif', color: 'white', margin: 0 }}>Content Publisher</h2>
-          <p style={{ color: '#94a3b8', margin: '0.5rem 0 0 0' }}>Manage dynamic website content across multiple sections.</p>
+          <h2 style={{ fontSize: '1.8rem', fontFamily: 'Outfit, sans-serif', color: 'var(--navy-900)', margin: 0 }}>Content Publisher</h2>
+          <p style={{ color: 'var(--text-body)', margin: '0.5rem 0 0 0' }}>Manage dynamic website content across multiple sections.</p>
         </div>
       </div>
 
       {/* Categories Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-          {CATEGORIES.map(cat => (
-            <button 
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              style={{
-                padding: '0.6rem 1.2rem',
-                borderRadius: '50px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '500',
-                whiteSpace: 'nowrap',
-                background: activeCategory === cat ? '#38bdf8' : 'rgba(255,255,255,0.05)',
-                color: activeCategory === cat ? '#0f172a' : '#94a3b8',
-                transition: 'all 0.3s'
-              }}
-            >
-              {cat}
-            </button>
-          ))}
+        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          {CATEGORIES.map(cat => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                style={{
+                  background: isActive ? '#38bdf8' : 'transparent',
+                  color: isActive ? '#ffffff' : 'var(--navy-800)',
+                  fontWeight: isActive ? '600' : '500',
+                  fontSize: '0.9rem',
+                  padding: '0.55rem 1.1rem',
+                  borderRadius: '20px',
+                  border: isActive ? '1px solid #0ea5e9' : '1px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: isActive ? '0 4px 12px rgba(14, 165, 233, 0.25)' : 'none'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'rgba(14, 165, 233, 0.08)';
+                    e.currentTarget.style.color = 'var(--navy-900)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'var(--navy-800)';
+                  }
+                }}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
         
         {/* Add New Button aligned horizontally with tabs */}
@@ -392,8 +481,8 @@ export default function ContentManager() {
       </div>
 
       {activeCategory === 'Company Settings' ? (
-        <form onSubmit={handleSaveCompanySettings} style={{ background: '#0f172a', padding: '2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <h3 style={{ color: 'white', marginTop: 0 }}>Company Information</h3>
+        <form onSubmit={handleSaveCompanySettings} style={{ background: 'var(--white)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--sky-200)', boxShadow: '0 4px 15px rgba(18,48,107,0.05)' }}>
+          <h3 style={{ color: 'var(--navy-900)', marginTop: 0 }}>Company Information</h3>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
             <div style={{ gridColumn: '1 / -1' }}>
@@ -420,29 +509,26 @@ export default function ContentManager() {
         </form>
       ) : (
         <>
-          <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', overflowX: 'auto' }}>
-            <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse', textAlign: 'left', color: 'white' }}>
+          <div style={{ background: 'var(--white)', borderRadius: '12px', border: '1px solid var(--sky-200)', overflowX: 'auto', boxShadow: '0 4px 15px rgba(18,48,107,0.05)' }}>
+            <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse', textAlign: 'left', color: 'var(--navy-900)' }}>
               <thead>
-                <tr style={{ background: 'rgba(0,0,0,0.3)' }}>
+                <tr style={{ background: 'var(--sky-100)' }}>
                   {renderTableHeaders()}
                   <th className="th-style">Date Added</th>
                   <th className="th-style" style={{ textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <AnimatePresence>
+                <React.Fragment>
                   {currentData.map(item => (
-                    <motion.tr 
+                    <tr 
                       key={item.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+                      style={{ borderBottom: '1px solid var(--sky-100)' }}
                     >
                       {renderTableCells(item)}
-                      <td style={{ padding: '1.2rem 1.5rem', color: '#cbd5e1' }}>{item.date}</td>
+                      <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-body)' }}>{item.date}</td>
                       <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                        <motion.button 
+                        <button 
                           onClick={() => {
                             if(activeCategory === 'Messages' && item.status === 'New') {
                               saveItems(items.map(i => i.id === item.id ? { ...i, status: 'Read' } : i));
@@ -454,32 +540,32 @@ export default function ContentManager() {
                           style={{ background: 'rgba(96, 165, 250, 0.1)', border: '1px solid rgba(96, 165, 250, 0.2)', color: '#60a5fa', cursor: 'pointer', marginRight: '0.8rem', padding: '0.4rem 1rem', borderRadius: '6px', fontSize: '0.85rem' }}
                         >
                           {activeCategory === 'Messages' ? 'View' : 'Edit'}
-                        </motion.button>
-                        <motion.button 
+                        </button>
+                        <button 
                           onClick={() => handleDelete(item.id)} 
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           style={{ background: 'rgba(248, 113, 113, 0.1)', border: '1px solid rgba(248, 113, 113, 0.2)', color: '#f87171', cursor: 'pointer', padding: '0.4rem 1rem', borderRadius: '6px', fontSize: '0.85rem' }}
                         >
                           Delete
-                        </motion.button>
+                        </button>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                   {currentData.length === 0 && (
                     <tr>
                       <td colSpan="4" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>No {activeCategory.toLowerCase()} available.</td>
                     </tr>
                   )}
-                </AnimatePresence>
+                </React.Fragment>
               </tbody>
             </table>
 
             {totalPages > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem', padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                <button onClick={prevPage} disabled={currentPage === 1} style={{ background: currentPage === 1 ? 'transparent' : 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '6px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}>Previous</button>
-                <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Page {currentPage} of {totalPages}</span>
-                <button onClick={nextPage} disabled={currentPage === totalPages} style={{ background: currentPage === totalPages ? 'transparent' : 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '6px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}>Next</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem', padding: '1rem 1.5rem', borderTop: '1px solid var(--sky-100)' }}>
+                <button onClick={prevPage} disabled={currentPage === 1} style={{ background: currentPage === 1 ? 'transparent' : 'var(--white)', color: 'var(--navy-900)', border: '1px solid var(--sky-200)', padding: '0.5rem 1rem', borderRadius: '6px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}>Previous</button>
+                <span style={{ color: 'var(--text-body)', fontSize: '0.9rem' }}>Page {currentPage} of {totalPages}</span>
+                <button onClick={nextPage} disabled={currentPage === totalPages} style={{ background: currentPage === totalPages ? 'transparent' : 'var(--white)', color: 'var(--navy-900)', border: '1px solid var(--sky-200)', padding: '0.5rem 1rem', borderRadius: '6px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}>Next</button>
               </div>
             )}
           </div>
@@ -487,17 +573,13 @@ export default function ContentManager() {
       )}
 
       {/* Modern Modal */}
-      <AnimatePresence>
+      <React.Fragment>
         {isModalOpen && (
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(5px)' }}>
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 30 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: -20 }}
-              transition={{ type: 'spring', bounce: 0.3 }}
-              style={{ background: '#0f172a', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '16px', padding: '2rem', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 50px rgba(0,0,0,0.5)' }}
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(11,31,75,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(5px)' }}>
+            <div 
+              style={{ background: 'var(--white)', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '16px', padding: '2rem', border: '1px solid var(--sky-200)', boxShadow: '0 25px 50px rgba(11,31,75,0.1)' }}
             >
-              <h3 style={{ margin: '0 0 1.5rem 0', color: 'white', fontFamily: 'Outfit, sans-serif' }}>{editingItem ? `Edit ${activeCategory.replace(/s$/, '')}` : `Create New ${activeCategory.replace(/s$/, '')}`}</h3>
+              <h3 style={{ margin: '0 0 1.5rem 0', color: 'var(--navy-900)', fontFamily: 'Outfit, sans-serif' }}>{editingItem ? `Edit ${activeCategory.replace(/s$/, '')}` : `Create New ${activeCategory.replace(/s$/, '')}`}</h3>
               
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <div style={{ maxHeight: '60vh', overflowY: 'auto', paddingRight: '0.5rem' }}>
@@ -516,21 +598,21 @@ export default function ContentManager() {
                   )}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--sky-200)' }}>
                   {activeCategory === 'Messages' ? (
-                     <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: '#3b82f6', color: 'white', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 'bold' }}>Close Viewing</button>
+                     <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'var(--blue-500)', color: 'white', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 'bold' }}>Close Viewing</button>
                   ) : (
                     <>
-                      <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', color: '#94a3b8', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px' }}>Cancel</button>
-                      <button type="submit" style={{ background: '#38bdf8', color: '#0f172a', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 'bold' }}>Save Changes</button>
+                      <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', color: 'var(--text-muted)', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px' }}>Cancel</button>
+                      <button type="submit" style={{ background: 'var(--teal-500)', color: 'white', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 'bold' }}>Save Changes</button>
                     </>
                   )}
                 </div>
               </form>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
-    </motion.div>
+      </React.Fragment>
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const DUMMY_REMINDERS = [
   { id: "REM-01", message: "Call Vikas Enterprises regarding finalizing the commercial inverter.", date: "2026-10-09", priority: "High", lead: "Vikas Enterprises", status: "Pending" },
@@ -73,20 +72,20 @@ export default function AdminReminders() {
 
   const getPriorityStyle = (priority) => {
     switch (priority) {
-      case 'High': return { bg: 'rgba(239, 68, 68, 0.2)', color: '#f87171' };
-      case 'Medium': return { bg: 'rgba(245, 158, 11, 0.2)', color: '#fbbf24' };
-      case 'Low': return { bg: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa' };
-      default: return { bg: 'rgba(255,255,255,0.1)', color: 'white' };
+      case 'High': return { bg: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' };
+      case 'Medium': return { bg: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b' };
+      case 'Low': return { bg: 'rgba(14, 165, 233, 0.15)', color: '#0ea5e9' };
+      default: return { bg: 'var(--sky-100)', color: 'var(--text-muted)' };
     }
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <div >
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontFamily: 'Outfit, sans-serif', color: 'white', margin: 0 }}>Reminders & Follow-Ups</h2>
-          <p style={{ color: '#94a3b8', margin: '0.5rem 0 0 0' }}>Never miss a follow-up with your leads.</p>
+          <h2 style={{ fontSize: '1.8rem', fontFamily: 'Outfit, sans-serif', color: 'var(--navy-900)', margin: 0 }}>Reminders & Follow-Ups</h2>
+          <p style={{ color: 'var(--text-body)', margin: '0.5rem 0 0 0' }}>Never miss a follow-up with your leads.</p>
         </div>
         <button 
           onClick={handleOpenNew}
@@ -97,42 +96,39 @@ export default function AdminReminders() {
       </div>
 
       {/* Reminders List */}
-      <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', color: 'white' }}>
+      <div style={{ background: 'var(--white)', borderRadius: '12px', border: '1px solid var(--sky-200)', overflow: 'hidden', boxShadow: '0 4px 15px rgba(18,48,107,0.05)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', color: 'var(--navy-900)' }}>
           <thead>
-            <tr style={{ background: 'rgba(0,0,0,0.3)' }}>
-              <th style={{ padding: '1rem 1.5rem', width: '5%', color: '#94a3b8' }}>Status</th>
-              <th style={{ padding: '1rem 1.5rem', color: '#94a3b8', fontWeight: '500' }}>Task Outline</th>
-              <th style={{ padding: '1rem 1.5rem', color: '#94a3b8', fontWeight: '500' }}>Due Date & Time</th>
-              <th style={{ padding: '1rem 1.5rem', color: '#94a3b8', fontWeight: '500' }}>Priority</th>
-              <th style={{ padding: '1rem 1.5rem', color: '#94a3b8', fontWeight: '500', textAlign: 'right' }}>Actions</th>
+            <tr style={{ background: 'var(--sky-100)' }}>
+              <th style={{ padding: '1rem 1.5rem', width: '5%', color: 'var(--navy-800)', fontWeight: '600' }}>Status</th>
+              <th style={{ padding: '1rem 1.5rem', color: 'var(--navy-800)', fontWeight: '600' }}>Task Outline</th>
+              <th style={{ padding: '1rem 1.5rem', color: 'var(--navy-800)', fontWeight: '600' }}>Due Date & Time</th>
+              <th style={{ padding: '1rem 1.5rem', color: 'var(--navy-800)', fontWeight: '600' }}>Priority</th>
+              <th style={{ padding: '1rem 1.5rem', color: 'var(--navy-800)', fontWeight: '600', textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <AnimatePresence>
+            <React.Fragment>
               {(reminders || []).map(rem => {
                 const isDone = rem.status === 'Done';
                 return (
-                  <motion.tr 
+                  <tr 
                     key={rem.id}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', opacity: isDone ? 0.6 : 1 }}
+                    style={{ borderBottom: '1px solid var(--sky-200)', opacity: isDone ? 0.6 : 1 }}
                   >
                     <td style={{ padding: '1.2rem 1.5rem', textAlign: 'center' }}>
                       <input 
                         type="checkbox" 
                         checked={isDone}
                         onChange={() => handleToggleStatus(rem.id, rem.status)}
-                        style={{ cursor: 'pointer', width: '20px', height: '20px', accentColor: '#10b981' }}
+                        style={{ cursor: 'pointer', width: '20px', height: '20px', accentColor: 'var(--teal-500)' }}
                       />
                     </td>
                     <td style={{ padding: '1.2rem 1.5rem' }}>
-                      <div style={{ fontWeight: 'bold', fontSize: '1rem', color: isDone ? '#94a3b8' : 'white', textDecoration: isDone ? 'line-through' : 'none' }}>{rem.message}</div>
-                      {rem.lead && <div style={{ fontSize: '0.85rem', color: '#38bdf8', marginTop: '0.3rem' }}>🔗 Lead: {rem.lead}</div>}
+                      <div style={{ fontWeight: 'bold', fontSize: '1rem', color: isDone ? 'var(--text-muted)' : 'var(--navy-900)', textDecoration: isDone ? 'line-through' : 'none' }}>{rem.message}</div>
+                      {rem.lead && <div style={{ fontSize: '0.85rem', color: 'var(--teal-600)', marginTop: '0.3rem' }}>🔗 Lead: {rem.lead}</div>}
                     </td>
-                    <td style={{ padding: '1.2rem 1.5rem', color: '#e2e8f0' }}>
+                    <td style={{ padding: '1.2rem 1.5rem', color: 'var(--navy-800)' }}>
                       {rem.date ? new Date(rem.date).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}
                     </td>
                     <td style={{ padding: '1.2rem 1.5rem' }}>
@@ -144,74 +140,71 @@ export default function AdminReminders() {
                       </span>
                     </td>
                     <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right' }}>
-                      <motion.button onClick={() => handleOpenEdit(rem)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', cursor: 'pointer', marginRight: '0.5rem', padding: '0.4rem 0.8rem', borderRadius: '6px' }}>Edit</motion.button>
-                      <motion.button onClick={() => handleDelete(rem.id)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ background: 'transparent', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#f87171', cursor: 'pointer', padding: '0.4rem 0.8rem', borderRadius: '6px' }}>Del</motion.button>
+                      <button onClick={() => handleOpenEdit(rem)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ background: 'var(--white)', border: '1px solid var(--sky-300)', color: 'var(--navy-800)', cursor: 'pointer', marginRight: '0.5rem', padding: '0.4rem 0.8rem', borderRadius: '6px' }}>Edit</button>
+                      <button onClick={() => handleDelete(rem.id)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#ef4444', cursor: 'pointer', padding: '0.4rem 0.8rem', borderRadius: '6px' }}>Del</button>
                     </td>
-                  </motion.tr>
+                  </tr>
                 );
               })}
               {(!reminders || reminders.length === 0) && (
-                <tr><td colSpan="5" style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>Woohoo! You have no pending tasks.</td></tr>
+                <tr><td colSpan="5" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>Woohoo! You have no pending tasks.</td></tr>
               )}
-            </AnimatePresence>
+            </React.Fragment>
           </tbody>
         </table>
       </div>
 
       {/* Editor Modal */}
-      <AnimatePresence>
+      <React.Fragment>
         {isModalOpen && (
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(5px)' }}>
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 30 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: -20 }}
-              style={{ background: '#0f172a', width: '100%', maxWidth: '500px', borderRadius: '16px', padding: '2rem', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 50px rgba(0,0,0,0.5)' }}
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(5px)' }}>
+            <div 
+              style={{ background: 'var(--white)', width: '100%', maxWidth: '500px', borderRadius: '16px', padding: '2rem', border: '1px solid var(--sky-200)', boxShadow: '0 25px 50px rgba(0,0,0,0.1)' }}
             >
-              <h3 style={{ margin: '0 0 1.5rem 0', color: 'white', fontFamily: 'Outfit, sans-serif' }}>
+              <h3 style={{ margin: '0 0 1.5rem 0', color: 'var(--navy-900)', fontFamily: 'Outfit, sans-serif' }}>
                 {editingReminder ? 'Edit Reminder' : 'Add New Reminder'}
               </h3>
               
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                 <div>
-                  <label style={{ display: 'block', color: '#94a3b8', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Task Outline / Message</label>
-                  <textarea required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} rows="3" style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none', resize: 'vertical' }} />
+                  <label style={{ display: 'block', color: 'var(--navy-800)', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Task Outline / Message</label>
+                  <textarea required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} rows="3" style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--sky-200)', background: 'var(--sky-50)', color: 'var(--navy-900)', outline: 'none', resize: 'vertical' }} />
                 </div>
                 
                 <div style={{ display: 'flex', gap: '1.5rem' }}>
                   <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', color: '#94a3b8', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Due Date & Time</label>
-                    <input type="datetime-local" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none', colorScheme: 'dark' }} />
+                    <label style={{ display: 'block', color: 'var(--navy-800)', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Due Date & Time</label>
+                    <input type="datetime-local" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--sky-200)', background: 'var(--sky-50)', color: 'var(--navy-900)', outline: 'none' }} />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', color: '#94a3b8', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Priority Level</label>
-                    <select required value={formData.priority} onChange={e => setFormData({...formData, priority: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: `1px solid ${getPriorityStyle(formData.priority).color}`, background: getPriorityStyle(formData.priority).bg, color: 'white', outline: 'none' }}>
-                      <option value="High" style={{ background: '#1e293b' }}>High</option>
-                      <option value="Medium" style={{ background: '#1e293b' }}>Medium</option>
-                      <option value="Low" style={{ background: '#1e293b' }}>Low</option>
+                    <label style={{ display: 'block', color: 'var(--navy-800)', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Priority Level</label>
+                    <select required value={formData.priority} onChange={e => setFormData({...formData, priority: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: `1px solid ${getPriorityStyle(formData.priority).color}`, background: getPriorityStyle(formData.priority).bg, color: 'var(--navy-900)', outline: 'none', fontWeight: 'bold' }}>
+                      <option value="High" style={{ background: 'var(--white)' }}>High</option>
+                      <option value="Medium" style={{ background: 'var(--white)' }}>Medium</option>
+                      <option value="Low" style={{ background: 'var(--white)' }}>Low</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', color: '#38bdf8', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Related CRM Lead (Optional)</label>
-                  <select value={formData.lead} onChange={e => setFormData({...formData, lead: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', background: 'rgba(56, 189, 248, 0.05)', color: 'white', outline: 'none' }}>
-                    <option value="" style={{ background: '#1e293b' }}>None - General Task</option>
+                  <label style={{ display: 'block', color: 'var(--teal-600)', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Related CRM Lead (Optional)</label>
+                  <select value={formData.lead} onChange={e => setFormData({...formData, lead: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(20, 163, 168, 0.3)', background: 'rgba(20, 163, 168, 0.05)', color: 'var(--navy-900)', outline: 'none' }}>
+                    <option value="" style={{ background: 'var(--white)' }}>None - General Task</option>
                     {availableLeads.map(leadName => (
-                       <option key={leadName} value={leadName} style={{ background: '#1e293b', color: 'white' }}>{leadName}</option>
+                       <option key={leadName} value={leadName} style={{ background: 'var(--white)', color: 'var(--navy-900)' }}>{leadName}</option>
                     ))}
                   </select>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
-                  <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', color: '#94a3b8', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px' }}>Cancel</button>
+                  <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'var(--white)', color: 'var(--text-body)', border: '1px solid var(--sky-200)', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 'bold' }}>Cancel</button>
                   <button type="submit" style={{ background: '#f59e0b', color: '#1e293b', border: 'none', cursor: 'pointer', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 'bold' }}>Save Reminder</button>
                 </div>
               </form>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
-    </motion.div>
+      </React.Fragment>
+    </div>
   );
 }

@@ -84,60 +84,57 @@ const SolarLogin = ({ onLogin, hideSignup = false }) => {
           <div className="login-popup-wrapper">
             <motion.div 
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ type: "spring", bounce: 0.4 }}
-            >
-              <form onSubmit={handleSubmit} className="solar-login-card">
-                <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                  <h2 style={{ color: 'white', marginBottom: '0.5rem', fontFamily: 'Outfit, sans-serif' }}>
-                    System Login
-                  </h2>
-                  <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-                    Secure Portal Access
-                  </p>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <input 
-                    type="text"
-                    value={username}
-                    onChange={(e) => {
-                      setUsername(e.target.value);
-                      setError('');
-                    }}
-                    className="solar-input"
-                    placeholder="Enter username"
-                    autoFocus
-                  />
-                  <input 
-                    type="password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setError('');
-                    }}
-                    className="solar-input"
-                    placeholder="Enter access key"
-                  />
-                  {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', margin: 0 }}>{error}</p>}
-                </div>
-
-                <button type="submit" className="solar-btn" style={{ marginTop: '1.5rem' }}>
-                  Authenticate
-                </button>
-                
-
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      <button className="reload-btn" onClick={startAnimation}>
-        Animation dobara chalayein
-      </button>
-    </div>
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               exit={{ opacity: 0, scale: 0.8 }}
+               transition={{ type: "spring", bounce: 0.4 }}
+             >
+               <form onSubmit={handleSubmit} className="solar-login-card">
+                 <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                   <h2 style={{ color: '#0f172a', marginBottom: '0.5rem', fontFamily: 'Outfit, sans-serif' }}>
+                     System Login
+                   </h2>
+                   <p style={{ color: '#475569', fontSize: '0.9rem' }}>
+                     Secure Portal Access
+                   </p>
+                 </div>
+ 
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                   <input 
+                     type="text"
+                     value={username}
+                     onChange={(e) => {
+                       setUsername(e.target.value);
+                       setError('');
+                     }}
+                     className="solar-input"
+                     placeholder="Enter username"
+                     autoFocus
+                   />
+                   <input 
+                     type="password"
+                     value={password}
+                     onChange={(e) => {
+                       setPassword(e.target.value);
+                       setError('');
+                     }}
+                     className="solar-input"
+                     placeholder="Enter access key"
+                   />
+                   {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', margin: 0 }}>{error}</p>}
+                 </div>
+ 
+                 <button type="submit" className="solar-btn" style={{ marginTop: '1.5rem' }}>
+                   Authenticate
+                 </button>
+                 
+ 
+               </form>
+             </motion.div>
+           </div>
+         )}
+       </AnimatePresence>
+ 
+     </div>
   );
 };
 

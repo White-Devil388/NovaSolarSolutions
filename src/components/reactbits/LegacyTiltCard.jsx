@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
-import './TiltCard.css';
+import './LegacyTiltCard.css';
 
 const DEFAULT_INNER_GRADIENT = 'transparent';
 

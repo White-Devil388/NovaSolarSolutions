@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import FlyingPosters from '../components/ui/FlyingPosters';
+import FlyingPosters from '../components/reactbits/FlyingPosters';
 import useLocalStorageData from '../hooks/useLocalStorageData';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
 
@@ -44,12 +44,21 @@ function Projects() {
 
   return (
     <>
-      <div style={{ background: '#020617', paddingTop: '4rem' }}>
-        <div style={{ width: '100%', textAlign: 'center', padding: '0 1rem' }}>
-          <h1 style={{ fontSize: 'clamp(2rem, 8vw, 4rem)', color: '#fff', margin: 0 }}>Visual Showcase</h1>
-          <p style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: 'clamp(0.9rem, 4vw, 1.2rem)', marginTop: '1rem' }}>Scroll horizontally to explore our dynamic portfolio</p>
+      <div style={{ 
+        background: 'linear-gradient(180deg, rgba(14, 138, 155, 0.4) 0%, rgba(11, 31, 75, 0.8) 100%), url(/images/green_windmills_1791612510771.png)', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center', 
+        paddingTop: '100px', 
+        marginTop: '-80px',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <div style={{ width: '100%', textAlign: 'center', padding: '0 1rem', position: 'relative', zIndex: 2, marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', color: 'white', margin: 0, textShadow: '0 2px 15px rgba(0,0,0,0.4)', fontWeight: '800' }}>Visual Showcase</h1>
+          <p style={{ color: 'var(--sky-200)', fontWeight: '600', fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', marginTop: '0.5rem', letterSpacing: '1px' }}>Scroll horizontally to explore our dynamic portfolio</p>
         </div>
-        <div style={{ height: '70vh', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ height: '70vh', position: 'relative', overflow: 'hidden', zIndex: 1 }}>
           <FlyingPosters items={items} planeWidth={550} planeHeight={550} />
         </div>
       </div>
@@ -73,7 +82,7 @@ function Projects() {
             <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h3 style={{ margin: 0 }}>{project.title}</h3>
-                <span style={{ fontSize: '1.5rem' }}>{project.icon || "☀️"}</span>
+                <span style={{ fontSize: '1.5rem' }}>{project.icon || "â˜€ï¸"}</span>
               </div>
               <p style={{ color: 'var(--primary)', margin: '0.5rem 0', fontWeight: 'bold' }}>{project.client}</p>
               <p style={{ color: 'var(--text-muted)' }}>{project.description}</p>

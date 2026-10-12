@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import AnimatedList from '../components/ui/AnimatedList';
+import React, { useState, useMemo, useCallback } from 'react';
+import AnimatedList from '../components/reactbits/AnimatedList';
 import useLocalStorageData from '../hooks/useLocalStorageData';
 import usePagination from '../hooks/usePagination';
+import useDebounce from '../hooks/useDebounce';
 
 const INITIAL_FAQS = [
   { q: "How much does solar cost?", a: "The cost varies depending on system size, location, and specific requirements. Reach out to get a custom quote." },
@@ -20,25 +21,33 @@ const INITIAL_FAQS = [
 
 function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedQuery = useDebounce(searchQuery, 250);
   
   const fetchedFaqs = useLocalStorageData('faq');
 
   const activeFaqs = useMemo(() => {
-    if (fetchedFaqs.length > 0) {
-      return fetchedFaqs.map(p => ({ q: p.question, a: p.answer }));
-    }
-    return INITIAL_FAQS;
-  }, [fetchedFaqs]);
+    const raw = fetchedFaqs.length > 0
+      ? fetchedFaqs.map(p => ({ q: p.question, a: p.answer }))
+      : INITIAL_FAQS;
 
-  const { currentData, currentPage, totalPages, nextPage, prevPage } = usePagination(activeFaqs, 7); // Show 7 FAQs per page
+    if (!debouncedQuery.trim()) return raw;
+    const qLower = debouncedQuery.toLowerCase().trim();
+    return raw.filter(item => 
+      item.q.toLowerCase().includes(qLower) || 
+      item.a.toLowerCase().includes(qLower)
+    );
+  }, [fetchedFaqs, debouncedQuery]);
 
-  const toggle = (i) => {
-    setOpenIndex(openIndex === i ? null : i);
-  };
+  const { currentData, currentPage, totalPages, nextPage, prevPage, goToPage, itemsRangeText, pagesList } = usePagination(activeFaqs, 6);
+
+  const toggle = useCallback((i) => {
+    setOpenIndex(prev => (prev === i ? null : i));
+  }, []);
 
   return (
     <div style={{
-      backgroundImage: 'linear-gradient(rgba(2, 6, 23, 0.15), rgba(2, 6, 23, 0.4)), url(/images/installation_bg.png)',
+      backgroundImage: 'linear-gradient(rgba(2, 6, 23, 0.15), rgba(2, 6, 23, 0.4)), url(/images/green_solar_field_1791612498444.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
@@ -47,9 +56,32 @@ function FAQ() {
       paddingBottom: '4rem'
     }}>
       <div className="page-padding" style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div className="section-header">
+        <div className="section-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h2 className="section-title">Frequently Asked Questions</h2>
           <p className="section-subtitle">Find answers to common questions about solar energy.</p>
+        </div>
+
+        {/* Debounced Search Bar */}
+        <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center' }}>
+          <input 
+            type="text"
+            placeholder="🔍 Search questions or topics..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              maxWidth: '550px',
+              padding: '0.85rem 1.6rem',
+              borderRadius: '50px',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              background: 'rgba(15, 23, 42, 0.65)',
+              backdropFilter: 'blur(10px)',
+              color: 'white',
+              fontSize: '1rem',
+              outline: 'none',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
+            }}
+          />
         </div>
 
       <AnimatedList 
@@ -61,8 +93,8 @@ function FAQ() {
               style={{ width: '100%', padding: '1.5rem', textAlign: 'left', background: 'transparent', border: 'none', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold' }}
             >
               {faq.q}
-              <span style={{ color: 'var(--primary)', fontSize: '1.5rem', transition: 'transform 0.3s', transform: openIndex === i ? 'rotate(180deg)' : 'rotate(0)' }}>
-                {openIndex === i ? '−' : '+'}
+              <span style={{ color: 'var(--teal-400)', fontSize: '1.4rem', transition: 'transform 0.3s', transform: openIndex === i ? 'rotate(45deg)' : 'rotate(0)' }}>
+                +
               </span>
             </button>
             {openIndex === i && (
@@ -73,17 +105,47 @@ function FAQ() {
           </div>
         ))}
       />
+
+      {currentData.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '3rem', color: 'rgba(255,255,255,0.8)' }}>
+          No questions found matching "{searchQuery}".
+        </div>
+      )}
       
       {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}>
-          <button onClick={prevPage} disabled={currentPage === 1} style={{ padding: '0.6rem 1.2rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: currentPage === 1 ? 'transparent' : 'rgba(255,255,255,0.1)', color: 'white', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}>
-            Prev
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '0.6rem', marginTop: '2.5rem' }}>
+          <button 
+            onClick={prevPage} 
+            disabled={currentPage === 1} 
+            style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: currentPage === 1 ? 'transparent' : 'rgba(255,255,255,0.15)', color: 'white', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+          >
+            &larr; Prev
           </button>
           
-          <span style={{ color: '#94a3b8' }}>Page {currentPage} of {totalPages}</span>
+          {pagesList.map(pg => (
+            <button
+              key={pg}
+              onClick={() => goToPage(pg)}
+              style={{
+                padding: '0.5rem 0.9rem',
+                borderRadius: '8px',
+                border: currentPage === pg ? '1px solid var(--teal-400)' : '1px solid rgba(255,255,255,0.15)',
+                background: currentPage === pg ? 'var(--teal-500)' : 'rgba(255,255,255,0.08)',
+                color: 'white',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              {pg}
+            </button>
+          ))}
           
-          <button onClick={nextPage} disabled={currentPage === totalPages} style={{ padding: '0.6rem 1.2rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: currentPage === totalPages ? 'transparent' : 'rgba(255,255,255,0.1)', color: 'white', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}>
-            Next
+          <button 
+            onClick={nextPage} 
+            disabled={currentPage === totalPages} 
+            style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: currentPage === totalPages ? 'transparent' : 'rgba(255,255,255,0.15)', color: 'white', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+          >
+            Next &rarr;
           </button>
         </div>
       )}

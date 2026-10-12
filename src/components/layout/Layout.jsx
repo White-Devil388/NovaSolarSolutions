@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Home, Zap, Package, ImageIcon, Info, BookOpen, Phone, Menu, X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import GooeyNav from './GooeyNav';
-import BlurText from '../ui/BlurText';
+import BlurText from '../reactbits/BlurText';
 import Breadcrumbs from './Breadcrumbs';
 
 function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -19,7 +20,10 @@ function Layout() {
     { label: "About", href: "/about" },
     { label: "Resources", href: "#", subItems: [
       { label: "Solar Calculator", href: "/calculator" },
-      { label: "Blogs", href: "/blog" }
+      { label: "Blogs", href: "/blog" },
+      { label: "Gallery", href: "/gallery" },
+      { label: "Team Members", href: "/team" },
+      { label: "Certifications", href: "/certifications" }
     ]},
     { label: "Contact", href: "/contact" },
   ];
@@ -29,9 +33,20 @@ function Layout() {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Handle scroll effect for navbar
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    // Initial check
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
-      <header className="navbar">
+      <header className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <Link to="/" className="nav-brand" style={{textDecoration: 'none'}}>
           Nova<span>Solar</span>
         </Link>
@@ -41,64 +56,102 @@ function Layout() {
         </div>
 
         <div className="nav-actions" style={{ display: 'flex', gap: '1rem' }}>
-          <Link to="/portal" className="btn btn-outline" style={{ padding: '0.4rem 1rem', fontSize: '0.9rem', margin: 0 }}>Employee Portal</Link>
+          <Link to="/portal" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.95rem', margin: 0 }}>Employee Portal</Link>
         </div>
 
         {/* Hamburger Menu Toggle (Mobile) */}
-        <div className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X size={28} style={{ cursor: 'pointer', zIndex: 999, position: 'relative' }} /> : <Menu size={28} style={{ cursor: 'pointer' }} />}
+        <div 
+          className="mobile-menu-btn" 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle Navigation Menu"
+        >
+          {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </div>
       </header>
 
       {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(2, 6, 23, 0.85)',
-          backdropFilter: 'blur(12px)',
-          zIndex: 99,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '2rem',
-          padding: '2rem'
-        }}>
-          {navItems.map((item, index) => (
-            <React.Fragment key={index}>
-              {item.subItems ? (
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-light)', letterSpacing: '1px', marginBottom: '1rem', opacity: 0.7 }}>
-                    {item.label}
-                  </div>
-                  {item.subItems.map((sub, i) => (
-                    <Link key={i} to={sub.href} style={{
-                      display: 'block', fontSize: '1.2rem', fontWeight: '500', color: 'var(--primary)', textDecoration: 'none', marginBottom: '0.8rem'
-                    }} onClick={() => setIsMobileMenuOpen(false)}>
-                      {sub.label}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25 }}
+            style={{
+              position: 'fixed',
+              top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(11, 31, 75, 0.98)',
+              backdropFilter: 'blur(16px)',
+              zIndex: 998,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              overflowY: 'auto',
+              padding: '6rem 1.5rem 3rem 1.5rem',
+              boxSizing: 'border-box'
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', width: '100%', maxWidth: '400px' }}>
+              {navItems.map((item, index) => (
+                <div key={index} style={{ width: '100%', textAlign: 'center' }}>
+                  {item.subItems ? (
+                    <div>
+                      <div 
+                        style={{ fontSize: '1.3rem', fontWeight: '600', color: 'var(--white)', letterSpacing: '0.5px', marginBottom: '0.8rem', opacity: 0.9 }}
+                      >
+                        {item.label}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', padding: '0.5rem 0', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
+                        {item.subItems.map((sub, i) => (
+                          <Link 
+                            key={i} 
+                            to={sub.href} 
+                            style={{
+                              fontSize: '1.05rem', 
+                              fontWeight: '500', 
+                              color: 'var(--sky-200)', 
+                              textDecoration: 'none', 
+                              padding: '0.4rem 0'
+                            }} 
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link 
+                      to={item.href} 
+                      style={{
+                        fontSize: '1.3rem',
+                        fontWeight: '600',
+                        color: 'var(--white)',
+                        textDecoration: 'none',
+                        display: 'block',
+                        padding: '0.5rem 0'
+                      }} 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
                     </Link>
-                  ))}
+                  )}
                 </div>
-              ) : (
-                <Link to={item.href} style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: 'var(--text-light)',
-                  textDecoration: 'none',
-                  letterSpacing: '1px'
-                }} onClick={() => setIsMobileMenuOpen(false)}>
-                  {item.label}
-                </Link>
-              )}
-            </React.Fragment>
-          ))}
-          <Link to="/portal" className="btn btn-primary" style={{ marginTop: '2rem', width: '80%' }} onClick={() => setIsMobileMenuOpen(false)}>Employee Portal</Link>
-        </div>
-      )}
+              ))}
+              <Link 
+                to="/portal" 
+                className="btn btn-primary" 
+                style={{ marginTop: '1rem', width: '100%', padding: '0.85rem', textAlign: 'center' }} 
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Employee Portal
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <main style={{ minHeight: '80vh', paddingTop: '80px' }}>
-        <Breadcrumbs />
+      <main style={{ minHeight: '80vh', paddingTop: '80px', width: '100%', overflowX: 'hidden' }}>
         <Outlet />
       </main>
 

@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
@@ -11,28 +11,45 @@ const Calculator = React.lazy(() => import('../pages/Calculator'));
 const Projects = React.lazy(() => import('../pages/Projects'));
 const About = React.lazy(() => import('../pages/About'));
 const Blog = React.lazy(() => import('../pages/Blog'));
+const BlogPost = React.lazy(() => import('../pages/BlogPost'));
 const Contact = React.lazy(() => import('../pages/Contact'));
 const FAQ = React.lazy(() => import('../pages/FAQ'));
 const ProductDetail = React.lazy(() => import('../pages/ProductDetail'));
 const PMSuryaGhar = React.lazy(() => import('../pages/PMSuryaGhar'));
+const Gallery = React.lazy(() => import('../pages/Gallery'));
+const Team = React.lazy(() => import('../pages/Team'));
+const Certifications = React.lazy(() => import('../pages/Certifications'));
 
 const AdminLogin = React.lazy(() => import('../pages/AdminLogin'));
 const AdminDashboard = React.lazy(() => import('../pages/AdminDashboard'));
 const EmployeePortal = React.lazy(() => import('../pages/EmployeePortal'));
 const EmployeeDashboard = React.lazy(() => import('../pages/EmployeeDashboard'));
 
-// Generic Loader for Suspense
-const SuspenseLoader = () => (
-  <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a' }}>
-    <div style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.1)', borderTop: '4px solid #38bdf8', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-    <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-  </div>
-);
+import { PageSkeleton, AdminDashboardSkeleton } from '../components/ui/Skeleton';
+
+// Route-Aware Skeleton Fallback for Suspense
+const SuspenseSkeletonFallback = () => {
+  const { pathname } = useLocation();
+  if (pathname.startsWith('/admin') || pathname.startsWith('/employee-dashboard') || pathname.startsWith('/portal')) {
+    return <AdminDashboardSkeleton />;
+  }
+  return <PageSkeleton />;
+};
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function AppRoutes() {
   return (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Routes>
+    <>
+      <ScrollToTop />
+      <Suspense fallback={<SuspenseSkeletonFallback />}>
+        <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="solutions" element={<Solutions />} />
@@ -43,9 +60,13 @@ function AppRoutes() {
           <Route path="projects" element={<Projects />} />
           <Route path="about" element={<About />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="blog/:id" element={<BlogPost />} />
           <Route path="contact" element={<Contact />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="pm-surya-ghar" element={<PMSuryaGhar />} />
+          <Route path="gallery" element={<Gallery />} />
+          <Route path="team" element={<Team />} />
+          <Route path="certifications" element={<Certifications />} />
           
           <Route path="*" element={
             <div style={{ padding: '8rem 5%', textAlign: 'center' }}>
@@ -70,7 +91,8 @@ function AppRoutes() {
           } 
         />
       </Routes>
-    </Suspense>
+      </Suspense>
+    </>
   );
 }
 

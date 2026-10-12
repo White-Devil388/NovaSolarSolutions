@@ -1,7 +1,8 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import TiltCard from '../components/ui/TiltCard';
+import TiltCard from '../components/reactbits/LegacyTiltCard';
+import useLocalStorageData from '../hooks/useLocalStorageData';
 
 // Dummy Data mapped to route slugs
 const PRODUCT_DATA = {
@@ -35,7 +36,7 @@ const PRODUCT_DATA = {
     technicalSpecs: {
       "Usable Capacity": "9.6 kWh",
       "Continuous Output": "5 kW",
-      "Operating Temp": "-10°C to 50°C",
+      "Operating Temp": "-10Â°C to 50Â°C",
       "Scalability": "Up to 5 Units"
     }
   },
@@ -77,9 +78,34 @@ const PRODUCT_DATA = {
 
 function ProductDetail() {
   const { category } = useParams();
+  const localProducts = useLocalStorageData('Products');
   
-  // Lookup data based on route param; handle invalid route gracefully
-  const data = PRODUCT_DATA[category];
+  // Lookup data based on route param;
+  let data = PRODUCT_DATA[category];
+
+  // Fallback for dynamically added custom products from localStorage
+  if (!data && localProducts) {
+    const customMatch = localProducts.find(p => p.slug === category || p.name.toLowerCase().replace(/\s+/g, '-') === category);
+    if (customMatch) {
+      data = {
+        title: customMatch.name,
+        subtitle: customMatch.description || customMatch.desc || "Premium NovaSolar equipment built for long-lasting performance.",
+        image: customMatch.image || "/images/solar_panel.png",
+        features: [
+          "High Efficiency Output & Reliability",
+          "Durable Weather Resistance Built for Indian Climates",
+          "10-Year Comprehensive Service Warranty",
+          "Plug-and-Play Streamlined Installation"
+        ],
+        technicalSpecs: {
+          "Model Type": customMatch.category || "Custom Series",
+          "Power Class": customMatch.price || customMatch.specs || "Standard Tier",
+          "Certifications": "ISO 9001, CE Approved",
+          "Material": "Premium Grade Alloy & Glass"
+        }
+      };
+    }
+  }
 
   if (!data) {
     return (

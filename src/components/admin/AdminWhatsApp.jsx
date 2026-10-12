@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { MessageSquare, Users, Send, Target, TrendingUp } from 'lucide-react';
 
 export default function AdminWhatsApp() {
@@ -16,7 +15,7 @@ export default function AdminWhatsApp() {
   const actionBtns = ['View Summary', 'Manage Bookings', 'Site Visits', 'Analytics', 'View Chats'];
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column', height: '100%', color: 'white' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: 'white' }}>
       
       {/* 1. Header Area Setup */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
@@ -223,6 +222,6 @@ export default function AdminWhatsApp() {
         </div>
       </div>
 
-    </motion.div>
+    </div>
   );
 }
